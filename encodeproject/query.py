@@ -1,5 +1,5 @@
 from requests import get
-from typing import List, Dict
+from typing import Dict
 
 
 def query(url: str, parameters: Dict[str, str]) -> Dict:
