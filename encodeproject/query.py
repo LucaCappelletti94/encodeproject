@@ -7,9 +7,15 @@ def query(url: str, parameters: Dict[str, str]) -> Dict:
     return get(url, params=parameters, headers={"Accept": "application/json"}).json()
 
 
-def encode_query(parameters: Dict[str, str]) -> Dict:
-    """Return JSON response for given parameters on encode."""
-    return query(url="https://encodeproject.org/search/", parameters=parameters)
+def encode_query(parameters: Dict[str, str]=None, path: str = "search") -> Dict:
+    """Return JSON response for given parameters on encode.
+        parameters: Dict[str, str], the parameters for the query.
+        path:str="search", the path where to run the query.
+    """
+    return query(
+        url="https://encodeproject.org/{path}/".format(path=path),
+        parameters=({} if parameters is None else parameters)
+    )
 
 
 def experiment(cell_line: str = None, assembly: str = None, target: str = None, status: str = "released", parameters: Dict[str, str] = None) -> Dict:
@@ -28,3 +34,12 @@ def experiment(cell_line: str = None, assembly: str = None, target: str = None, 
         **({} if target is None else {"target.label": target}),
         **({} if parameters is None else parameters)
     })
+
+
+def biosample(accession: str):
+    """Return JSON response for given biosample.
+        accession:str, code corresponding to biosample.
+    """
+    return encode_query(
+        path="experiments/{accession}".format(accession=accession)
+    )

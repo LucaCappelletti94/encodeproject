@@ -1,3 +1,3 @@
-from .query import experiment
+from .query import experiment, biosample
 
-__all__ = ["experiment"]
+__all__ = ["experiment", "biosample"]
