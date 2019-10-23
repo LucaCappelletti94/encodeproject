@@ -18,8 +18,78 @@ Since some software handling coverages sometime get slightly different results, 
 
 |coveralls| |sonar_coverage| |code_climate_coverage|
 
-Python package wrapping some of the encode project APIs.
+Usage Examples
+-----------------------------------------------
+The package contains both methods to run queries on the `Encode Project APIs <https://www.encodeproject.org/help/rest-api/>`_ and
+methods to filter the responses. Every available method has a comprehensive docstring attached to it, so I welcome you to
+read the source code. 
 
+Queries
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The library currently offers to query methods that already integrate some filtering properties:
+one for the `experiments <https://www.encodeproject.org/experiments/>`_
+and one for the `biosamples <https://www.encodeproject.org/biosamples/>`_.
+
+For quering the experiments you can run the following:
+
+.. code:: python
+
+    from encodeproject import experiment
+
+    my_experiment_query_response = experiment(
+        assembly="hg19", # The assembly label, for instance "hg19".
+        status="released", # The release status, can be either "released", "archived" or "revoked".
+        cell_line="HepG2", # The label for the chosen cell line for instance "HepG2".
+        target="ARID3A", # The target name, for instance "ARID3A".
+        parameters = {} # Additional query parameters
+    )
+
+All parameters are optional, they just act as additional filters.
+
+For quering the biosamples you can run the following:
+
+.. code:: python
+
+    from encodeproject import biosample
+
+    my_biosample_query_response = biosample(
+        accession="ENCSR000EDP", # The accession code for the desired biosample
+        file_format="bigwig", # The file extension
+        output_type="fold change over control", # The name of output you are interested in
+        assembly="hg19", #  The assembly label, for instance "hg19".
+        biological_replicates=[1, 2] # The biological replicates that have to be contained within the file.
+    )
+
+All parameters are optional except for the accession code.
+
+
+Filters
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Since the response files can get quite big and hard to read, I've prepared also a couple filter functions.
+
+For filtering the accessions codes from an experiment response you can use:
+
+.. code:: python
+
+    from encodeproject import accessions
+
+    codes = accessions(my_experiment_query_response)
+
+
+For filtering the download urls from a biosample response you can use:
+
+.. code:: python
+
+    from encodeproject import download_urls
+
+    codes = download_urls(my_biosample_query_response)
+
+
+Issues and Feature Requests
+-----------------------------------------
+This library started out of necessity to script quickly some queries on the encodeproject. If you need some specific feature
+that isn't currently already offered by the library, please do proceed with a pull request (quickest way: add the feature yourself
+and push it on the library) or alternatively you can open an issue and when I'll get the time I'll see to it.
 
 .. |travis| image:: https://travis-ci.org/LucaCappelletti94/encodeproject.png
    :target: https://travis-ci.org/LucaCappelletti94/encodeproject
