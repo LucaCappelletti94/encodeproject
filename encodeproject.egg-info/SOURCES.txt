@@ -1,0 +1,13 @@
+MANIFEST.in
+README.rst
+setup.py
+encodeproject/__init__.py
+encodeproject/__version__.py
+encodeproject/filters.py
+encodeproject/query.py
+encodeproject/utils.py
+encodeproject.egg-info/PKG-INFO
+encodeproject.egg-info/SOURCES.txt
+encodeproject.egg-info/dependency_links.txt
+encodeproject.egg-info/requires.txt
+encodeproject.egg-info/top_level.txt
