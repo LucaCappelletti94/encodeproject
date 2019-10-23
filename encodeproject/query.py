@@ -18,12 +18,13 @@ def encode_query(parameters: Dict[str, str] = None, path: str = "search") -> Dic
     )
 
 
-def experiment(cell_line: str = None, assembly: str = None, target: str = None, status: str = "released", parameters: Dict[str, str] = None) -> Dict:
+def experiment(cell_line: str = None, assembly: str = None, target: str = None, status: str = "released", searchTerm:str=None, parameters: Dict[str, str] = None) -> Dict:
     """Return JSON response for given parameters.
         cell_line: str = None, the label for the chosen cell line for instance "HepG2".
         assembly: str = None, the assembly label, for instance "hg19".
         target: str = None, the target name, for instance "ARID3A".
         status: str = "released", the release status, can be either "released", "archived" or "revoked".
+        searchTerm: str = None, additional search terms.
         parameters: Dict[str, str], the remaining parameters that are not currently supported directly.
     """
     return encode_query({
@@ -32,6 +33,7 @@ def experiment(cell_line: str = None, assembly: str = None, target: str = None, 
         **({} if cell_line is None else {"biosample_ontology.term_name": cell_line}),
         **({} if assembly is None else {"assembly": assembly}),
         **({} if target is None else {"target.label": target}),
+        **({} if searchTerm is None else {"searchTerm": searchTerm}),
         **({} if parameters is None else parameters)
     })
 

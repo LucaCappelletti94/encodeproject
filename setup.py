@@ -62,7 +62,8 @@ setup(
     # Add here the package dependencies
     install_requires=[
         "requests",
-        "tqdm"
+        "tqdm",
+        "humanize"
     ],
     extras_require=extras,
 )

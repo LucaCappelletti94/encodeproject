@@ -1,5 +1,7 @@
 from tqdm.auto import tqdm
 import requests
+import humanize
+from typing import List
 
 __all__ = ["download"]
 
@@ -31,3 +33,10 @@ def download(url: str, path: str = None, block_size: int = 32768):
     if total_size != 0 and t.n != total_size:
         raise ValueError(
             "The downloaded size does not match the header total size.")
+
+
+def total_size(urls: List[str]) -> str:
+    return humanize.naturalsize(sum([
+        int(requests.get(url, stream=True).headers.get('content-length', 0))
+        for url in tqdm(urls)
+    ]))
