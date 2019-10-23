@@ -1,4 +1,4 @@
-from encodeproject import experiment
+from encodeproject import experiment, biosample
 from dict_hash import sha256
 from typing import Dict
 import json
@@ -17,5 +17,21 @@ def cached_experiment(**kwargs: Dict):
             return json.load(f)
     response = experiment(**kwargs)
     with open(path, "w") as f:
-        return json.dump(response, f)
+        json.dump(response, f)
+    return response
+
+
+def cached_biosample(**kwargs: Dict):
+    path = "tests/cached_biosample"
+    os.makedirs(path, exist_ok=True)
+    path = "{path}/{sha}.json".format(
+        path=path,
+        sha=sha256(kwargs)
+    )
+    if os.path.exists(path):
+        with open(path, "r") as f:
+            return json.load(f)
+    response = biosample(**kwargs)
+    with open(path, "w") as f:
+        json.dump(response, f)
     return response
