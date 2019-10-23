@@ -14,7 +14,7 @@ As usual, just download it using pip:
 
 Tests Coverage
 ----------------------------------------------
-Since some software handling coverages sometime get slightly different results, here's three of them:
+Since some software handling coverages sometimes get slightly different results, here's three of them:
 
 |coveralls| |sonar_coverage| |code_climate_coverage|
 
@@ -30,7 +30,7 @@ The library currently offers to query methods that already integrate some filter
 one for the `experiments <https://www.encodeproject.org/experiments/>`_
 and one for the `biosamples <https://www.encodeproject.org/biosamples/>`_.
 
-For quering the experiments you can run the following:
+For querying the experiments you can run the following:
 
 .. code:: python
 
@@ -46,7 +46,7 @@ For quering the experiments you can run the following:
 
 All parameters are optional, they just act as additional filters.
 
-For quering the biosamples you can run the following:
+For querying the biosamples you can run the following:
 
 .. code:: python
 
@@ -76,7 +76,7 @@ For filtering the accessions codes from an experiment response you can use:
     codes = accessions(my_experiment_query_response)
 
 
-For filtering the download urls from a biosample response you can use:
+For filtering the download URLs from a biosample response you can use:
 
 .. code:: python
 
@@ -87,7 +87,7 @@ For filtering the download urls from a biosample response you can use:
 
 Utilities
 -----------------------------------------
-I've added also a method to download from a given URL, showing a loading bar, based on `this answer from stackoverflow <https://stackoverflow.com/questions/37573483/progress-bar-while-download-file-over-http-with-requests/37573701#37573701>`_.
+I've added also a method to download from a given URL, showing a loading bar, based on `this answer from StackOverflow <https://stackoverflow.com/questions/37573483/progress-bar-while-download-file-over-http-with-requests/37573701#37573701>`_.
 
 .. code:: python
 
@@ -99,7 +99,7 @@ I've added also a method to download from a given URL, showing a loading bar, ba
 
 Issues and Feature Requests
 -----------------------------------------
-This library started out of necessity to script quickly some queries on the encodeproject. If you need some specific feature
+This library started out of necessity to script some queries on the encodeproject. If you need some specific feature
 that isn't currently already offered by the library, please do proceed with a pull request (quickest way: add the feature yourself
 and push it on the library) or alternatively you can open an issue and when I'll get the time I'll see to it.
 
