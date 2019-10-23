@@ -85,6 +85,11 @@ For filtering the download urls from a biosample response you can use:
     codes = download_urls(my_biosample_query_response)
 
 
+Utilities
+-----------------------------------------
+I've added also a method to download from a given URL, showing a loading bar.
+
+
 Issues and Feature Requests
 -----------------------------------------
 This library started out of necessity to script quickly some queries on the encodeproject. If you need some specific feature
