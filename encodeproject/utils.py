@@ -36,6 +36,9 @@ def download(url: str, path: str = None, block_size: int = 32768):
 
 
 def total_size(urls: List[str]) -> str:
+    """Return humanized total size of files at given urls.
+        urls: List[str], list of urls.
+    """
     return humanize.naturalsize(sum([
         int(requests.get(url, stream=True).headers.get('content-length', 0))
         for url in tqdm(urls)
