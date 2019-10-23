@@ -87,7 +87,14 @@ For filtering the download urls from a biosample response you can use:
 
 Utilities
 -----------------------------------------
-I've added also a method to download from a given URL, showing a loading bar.
+I've added also a method to download from a given URL, showing a loading bar, based on `this answer from stackoverflow <https://stackoverflow.com/questions/37573483/progress-bar-while-download-file-over-http-with-requests/37573701#37573701>`_.
+
+.. code:: python
+
+    from encodeproject import download
+
+    download("https://encode-public.s3.amazonaws.com/2012/07/01/074e1b37-2be1-4f6a-aa42-6c512fd1834b/ENCFF000XOW.bigWig")
+    
 
 
 Issues and Feature Requests
