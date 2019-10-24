@@ -58,7 +58,7 @@ def sample_files_informations(sample: Dict) -> List[Dict]:
             "accession":f["accession"],
             "file_size":f["file_size"],
             "file_format":f["file_format"],
-            "assembly":f["assembly"],
+            "assembly":f["assembly"] if "assembly" in f else None,
             "biological_replicates":f["biological_replicates"],
             "output_type":f["output_type"],
             "url":f["cloud_metadata"]["url"]
