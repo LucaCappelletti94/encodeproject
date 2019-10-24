@@ -71,7 +71,6 @@ def sample_to_dataframe(sample: Dict) -> pd.DataFrame:
         sample:Dict, the sample to convert into a simple DataFrame.
     """
     df = pd.DataFrame(sample_files_informations(sample))
-    print(df)
     for key, value in sample_informations(sample).items():
         df[key] = value
     return df
