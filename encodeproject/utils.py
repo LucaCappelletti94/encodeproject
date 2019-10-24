@@ -62,7 +62,7 @@ def sample_files_informations(sample: Dict) -> List[Dict]:
             "biological_replicates":f["biological_replicates"],
             "output_type":f["output_type"],
             "url":f["cloud_metadata"]["url"]
-        } for f in sample["files"]
+        }.items() for f in sample["files"]
     ]
 
 
