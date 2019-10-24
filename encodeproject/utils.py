@@ -59,10 +59,10 @@ def sample_files_informations(sample: Dict) -> List[Dict]:
             "file_size":f["file_size"],
             "file_format":f["file_format"],
             "assembly":f["assembly"] if "assembly" in f else None,
-            "biological_replicates":f["biological_replicates"],
+            "biological_replicates":sorted(f["biological_replicates"]),
             "output_type":f["output_type"],
             "url":f["cloud_metadata"]["url"]
-        }.items() for f in sample["files"]
+        } for f in sample["files"]
     ]
 
 
@@ -71,6 +71,7 @@ def sample_to_dataframe(sample: Dict) -> pd.DataFrame:
         sample:Dict, the sample to convert into a simple DataFrame.
     """
     df = pd.DataFrame(sample_files_informations(sample))
+    print(df)
     for key, value in sample_informations(sample).items():
         df[key] = value
     return df

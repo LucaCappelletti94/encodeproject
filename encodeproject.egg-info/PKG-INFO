@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: encodeproject
-Version: 1.0.1
+Version: 1.0.2
 Summary: Python package wrapping some of the encode project APIs.
 Home-page: https://github.com/LucaCappelletti94/encodeproject
 Author: Luca Cappelletti
