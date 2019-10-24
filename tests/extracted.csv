@@ -1,0 +1,2 @@
+,accession,assembly,biological_replicates,file_format,file_size,output_type,status,url,organism,cell_line,target
+0,ENCFF670JFE,hg19,"[1, 2]",bigWig,1087020373,fold change over control,released,https://encode-public.s3.amazonaws.com/2016/08/23/64717fc1-8553-40c5-860c-9b71b618283f/ENCFF670JFE.bigWig,human,K562,eGFP-NFE2

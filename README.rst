@@ -87,6 +87,9 @@ For filtering the download URLs from a biosample response you can use:
 
 Utilities
 -----------------------------------------
+
+Download utility
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 I've added also a method to download from a given URL, showing a loading bar, based on `this answer from StackOverflow <https://stackoverflow.com/questions/37573483/progress-bar-while-download-file-over-http-with-requests/37573701#37573701>`_.
 
 .. code:: python
@@ -94,7 +97,17 @@ I've added also a method to download from a given URL, showing a loading bar, ba
     from encodeproject import download
 
     download("https://encode-public.s3.amazonaws.com/2012/07/01/074e1b37-2be1-4f6a-aa42-6c512fd1834b/ENCFF000XOW.bigWig")
-    
+
+
+Sample to DataFrame instruction
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Utility to convert a sample to a relatively simple `pandas DataFrame <https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html>`_.
+
+.. code:: python
+
+    from encodeproject import sample_to_dataframe
+
+    df = sample_to_dataframe(my_biosample_query_response)
 
 
 Issues and Feature Requests

@@ -18,7 +18,7 @@ def encode_query(parameters: Dict[str, str] = None, path: str = "search") -> Dic
     )
 
 
-def experiment(cell_line: str = None, assembly: str = None, target: str = None, status: str = "released", searchTerm:str=None, parameters: Dict[str, str] = None) -> Dict:
+def experiment(cell_line: str = None, assembly: str = None, target: str = None, status: str = "released", searchTerm: str = None, parameters: Dict[str, str] = None) -> Dict:
     """Return JSON response for given parameters.
         cell_line: str = None, the label for the chosen cell line for instance "HepG2".
         assembly: str = None, the assembly label, for instance "hg19".
@@ -30,32 +30,22 @@ def experiment(cell_line: str = None, assembly: str = None, target: str = None, 
     return encode_query({
         "type": "Experiment",
         "status": status,
-        **({} if cell_line is None else {"biosample_ontology.term_name": cell_line}),
-        **({} if assembly is None else {"assembly": assembly}),
-        **({} if target is None else {"target.label": target}),
-        **({} if searchTerm is None else {"searchTerm": searchTerm}),
-        **({} if parameters is None else parameters)
+        **{
+            key: value for key, value in {
+                "biosample_ontology.term_name": cell_line,
+                "assembly": assembly,
+                "target.label": target,
+                "searchTerm": searchTerm
+            } if value is not None
+        },
+        ** ({} if parameters is None else parameters)
     })
 
 
-def biosample(accession: str, file_format: str = None, output_type: str = None, assembly: str = None, biological_replicates: List = None) -> Dict:
+def biosample(accession: str) -> Dict:
     """Return JSON response for given biosample.
         accession:str, code corresponding to biosample.
-        file_format:str=None, the format of the files, for instance bigwig.
-        output_type:str = None, the output of the files, for instance fold change over control.
-        assembly:str=None, the assembly of the files, for instance assembly.
-        biological_replicates:List=None, the specific biological replicates, for instance [2, 1].
     """
-    sample = encode_query(
+    return encode_query(
         path="experiments/{accession}".format(accession=accession)
     )
-    files = sample["files"]
-    sample["files"] = [
-        f for f in files
-        if (file_format is None or f["file_format"].lower() == file_format.lower()) and
-           (output_type is None or f["output_type"].lower() == output_type.lower()) and
-           (assembly is None or f["assembly"].lower() == assembly.lower()) and
-           (biological_replicates is None or set(
-               f["biological_replicates"]) == set(biological_replicates))
-    ]
-    return sample
