@@ -54,14 +54,7 @@ For querying the biosamples you can run the following:
 
     my_biosample_query_response = biosample(
         accession="ENCSR000EDP", # The accession code for the desired biosample
-        file_format="bigwig", # The file extension
-        output_type="fold change over control", # The name of output you are interested in
-        assembly="hg19", #  The assembly label, for instance "hg19".
-        biological_replicates=[1, 2] # The biological replicates that have to be contained within the file.
     )
-
-All parameters are optional except for the accession code.
-
 
 Filters
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
