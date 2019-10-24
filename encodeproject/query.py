@@ -36,7 +36,7 @@ def experiment(cell_line: str = None, assembly: str = None, target: str = None, 
                 "assembly": assembly,
                 "target.label": target,
                 "searchTerm": searchTerm
-            } if value is not None
+            }.items() if value is not None
         },
         ** ({} if parameters is None else parameters)
     })
