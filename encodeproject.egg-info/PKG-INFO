@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: encodeproject
-Version: 1.0.0
+Version: 1.0.1
 Summary: Python package wrapping some of the encode project APIs.
 Home-page: https://github.com/LucaCappelletti94/encodeproject
 Author: Luca Cappelletti
@@ -62,14 +62,7 @@ Description: encodeproject
         
             my_biosample_query_response = biosample(
                 accession="ENCSR000EDP", # The accession code for the desired biosample
-                file_format="bigwig", # The file extension
-                output_type="fold change over control", # The name of output you are interested in
-                assembly="hg19", #  The assembly label, for instance "hg19".
-                biological_replicates=[1, 2] # The biological replicates that have to be contained within the file.
             )
-        
-        All parameters are optional except for the accession code.
-        
         
         Filters
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -95,6 +88,9 @@ Description: encodeproject
         
         Utilities
         -----------------------------------------
+        
+        Download utility
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         I've added also a method to download from a given URL, showing a loading bar, based on `this answer from StackOverflow <https://stackoverflow.com/questions/37573483/progress-bar-while-download-file-over-http-with-requests/37573701#37573701>`_.
         
         .. code:: python
@@ -102,7 +98,17 @@ Description: encodeproject
             from encodeproject import download
         
             download("https://encode-public.s3.amazonaws.com/2012/07/01/074e1b37-2be1-4f6a-aa42-6c512fd1834b/ENCFF000XOW.bigWig")
-            
+        
+        
+        Sample to DataFrame instruction
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        Utility to convert a sample to a relatively simple `pandas DataFrame <https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html>`_.
+        
+        .. code:: python
+        
+            from encodeproject import sample_to_dataframe
+        
+            df = sample_to_dataframe(my_biosample_query_response)
         
         
         Issues and Feature Requests
