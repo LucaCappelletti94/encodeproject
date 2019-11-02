@@ -54,14 +54,14 @@ def sample_files_informations(sample: Dict) -> List[Dict]:
     """
     return [
         {
-            "status": f["status"],
-            "accession":f["accession"],
-            "file_size":f["file_size"],
-            "file_format":f["file_format"],
+            "status": f["status"] if "status" in f else None,
+            "accession":f["accession"] if "accession" in f else None,
+            "file_size":f["file_size"] if "file_size" in f else None,
+            "file_format":f["file_format"] if "file_format" in f else None,
             "assembly":f["assembly"] if "assembly" in f else None,
             "biological_replicates":sorted(f["biological_replicates"]),
-            "output_type":f["output_type"],
-            "url":f["cloud_metadata"]["url"]
+            "output_type":f["output_type"] if "output_type" in f else None,
+            "url":f["cloud_metadata"]["url"] if "cloud_metadata" in f else None,
         } for f in sample["files"]
     ]
 
