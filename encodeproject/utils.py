@@ -1,6 +1,7 @@
 from tqdm.auto import tqdm
 import requests
 import humanize
+import os
 from typing import List, Dict
 import pandas as pd
 
@@ -26,13 +27,14 @@ def download(url: str, path: str = None, block_size: int = 32768):
     r = requests.get(url, stream=True)
     total_size = int(r.headers.get('content-length', 0))
     t = tqdm(total=total_size, unit='iB',
-             unit_scale=True, desc="Download in progress")
+             unit_scale=True, desc="Downloading to {path}".format(path=path), dynamic_ncols=True)
     with open(path, 'wb') as f:
         for data in r.iter_content(block_size):
             t.update(len(data))
             f.write(data)
     t.close()
     if total_size != 0 and t.n != total_size:
+        os.remove(path)
         raise ValueError(
             "The downloaded size does not match the header total size.")
 
