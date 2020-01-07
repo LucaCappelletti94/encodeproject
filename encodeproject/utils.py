@@ -33,10 +33,6 @@ def download(url: str, path: str = None, block_size: int = 32768):
             t.update(len(data))
             f.write(data)
     t.close()
-    if total_size != 0 and t.n != total_size:
-        os.remove(path)
-        raise ValueError(
-            "The downloaded size does not match the header total size.")
 
 
 def sample_informations(sample: Dict) -> Dict:
