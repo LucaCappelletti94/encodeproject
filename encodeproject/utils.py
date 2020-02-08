@@ -26,8 +26,14 @@ def download(url: str, path: str = None, block_size: int = 32768):
         path = url.split("/")[-1]
     r = requests.get(url, stream=True)
     total_size = int(r.headers.get('content-length', 0))
-    t = tqdm(total=total_size, unit='iB',
-             unit_scale=True, desc="Downloading to {path}".format(path=path), dynamic_ncols=True)
+    t = tqdm(
+        total=total_size,
+        unit='iB',
+        unit_scale=True,
+        desc="Downloading to {path}".format(path=path),
+        dynamic_ncols=True,
+        leave=False
+    )
     with open(path, 'wb') as f:
         for data in r.iter_content(block_size):
             t.update(len(data))
