@@ -34,6 +34,9 @@ def download(url: str, path: str = None, block_size: int = 32768):
         dynamic_ncols=True,
         leave=False
     )
+    directory = os.path.dirname(os.path.abspath(path))
+    if directory:
+        os.makedirs(directory, exist_ok=True)
     with open(path, 'wb') as f:
         for data in r.iter_content(block_size):
             t.update(len(data))
