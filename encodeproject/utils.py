@@ -90,6 +90,6 @@ def sample_to_dataframe(sample: Dict) -> pd.DataFrame:
 def normalize_sample(sample: Dict) -> Dict:
     if "files" not in sample:
         return {
-            "files": sample.copy()
+            "files": [sample.copy()]
         }
     return sample
