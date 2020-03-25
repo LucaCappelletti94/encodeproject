@@ -13,9 +13,12 @@ def download(url: str, path: str = None, block_size: int = 32768):
 
     Parameters
     ----------------------
-    url:str, The url from where to download the data.
-    path:str=None, The path where to store the data, if None the end of the url is used.
-    block_size:int=1024, The download block size.
+    url:str,
+        The url from where to download the data.
+    path:str=None,
+        The path where to store the data, if None the end of the url is used.
+    block_size:int=1024,
+        The download block size.
 
     Raises
     ----------------------
@@ -77,7 +80,16 @@ def sample_to_dataframe(sample: Dict) -> pd.DataFrame:
     """Return simple dataframe representation for given sample.
         sample:Dict, the sample to convert into a simple DataFrame.
     """
+    sample = normalize_sample(sample)
     df = pd.DataFrame(sample_files_informations(sample))
     for key, value in sample_informations(sample).items():
         df[key] = value
     return df
+
+
+def normalize_sample(sample: Dict) -> Dict:
+    if "files" not in sample:
+        return {
+            "files": sample.copy()
+        }
+    return sample
