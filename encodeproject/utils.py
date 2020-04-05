@@ -5,7 +5,7 @@ import os
 from typing import List, Dict
 import pandas as pd
 
-__all__ = ["download", "sample_to_dataframe"]
+__all__ = ["download", "biosample_to_dataframe"]
 
 
 def download(url: str, path: str = None, block_size: int = 32768):
@@ -77,7 +77,7 @@ def sample_files_informations(sample: Dict) -> List[Dict]:
     ]
 
 
-def sample_to_dataframe(sample: Dict) -> pd.DataFrame:
+def biosample_to_dataframe(sample: Dict) -> pd.DataFrame:
     """Return simple dataframe representation for given sample.
         sample:Dict, the sample to convert into a simple DataFrame.
     """

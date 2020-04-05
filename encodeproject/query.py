@@ -1,5 +1,9 @@
 from requests import get
-from typing import Dict, List
+from typing import Dict, List, Union
+from multiprocessing import cpu_count, Pool
+from tqdm.auto import tqdm
+from .utils import biosample_to_dataframe
+import pandas as pd
 
 
 def query(url: str, parameters: Dict[str, str]) -> Dict:
@@ -42,10 +46,53 @@ def experiment(cell_line: str = None, assembly: str = None, target: str = None, 
     })
 
 
-def biosample(accession: str) -> Dict:
+def biosample(accession: str,  to_dataframe: bool = True) -> Dict:
     """Return JSON response for given biosample.
-        accession:str, code corresponding to biosample.
+
+    Parameters
+    -----------------------------
+    accessions: List[str],
+        code corresponding to biosample.
+    to_dataframe: bool = True,
+        Whetever to convert the obtained data to a DataFrame.
+
+    Returns
+    -----------------------------
+    Return the list of biosample curresponding to given accession codes.
     """
-    return encode_query(
+    data = encode_query(
         path="experiments/{accession}".format(accession=accession)
     )
+    return biosample_to_dataframe(data) if to_dataframe else data
+
+
+def _biosample(args) -> Dict:
+    return biosample(*args)
+
+
+def biosamples(accessions: List[str], to_dataframe: bool = True) -> List[Union[Dict, pd.DataFrame]]:
+    """Return list of JSON responses for given accession codes.
+
+    Parameters
+    -----------------------------
+    accessions: List[str],
+        code corresponding to biosample.
+    to_dataframe: bool = True,
+        Whetever to convert the obtained data to a DataFrame.
+
+    Returns
+    -----------------------------
+    Return the list of biosamples curresponding to given accession code.
+    """
+    with Pool(min(cpu_count(), len(accessions))) as p:
+        data = list(tqdm(
+            p.imap(_biosample, ((accession, to_dataframe)
+                                for accession in accessions)),
+            total=len(accessions),
+            desc="Retrieving biosamples",
+            leave=False,
+            dynamic_ncols=True
+        ))
+        p.close()
+        p.join()
+    return pd.concat(data) if to_dataframe else data

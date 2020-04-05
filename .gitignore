@@ -1,5 +1,5 @@
-\.vscode/
-\.DS_Store
+.vscode/
+.DS_Store
 __pycache__
 */__pycache__/*
 **/__pycache__/*
@@ -9,3 +9,4 @@ __pycache__
 coverage.xml
 *.egg-info
 *.bigWig
+.pytest_cache

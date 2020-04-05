@@ -98,9 +98,9 @@ Utility to convert a sample to a relatively simple `pandas DataFrame <https://pa
 
 .. code:: python
 
-    from encodeproject import sample_to_dataframe
+    from encodeproject import biosample_to_dataframe
 
-    df = sample_to_dataframe(my_biosample_query_response)
+    df = biosample_to_dataframe(my_biosample_query_response)
 
 
 Issues and Feature Requests
