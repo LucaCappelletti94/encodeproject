@@ -4,8 +4,10 @@ from multiprocessing import cpu_count, Pool
 from tqdm.auto import tqdm
 from .utils import biosample_to_dataframe
 import pandas as pd
+from cache_decorator import Cache
 
 
+@Cache(cache_path="encodeproject/{_hash}.json.gz")
 def query(url: str, parameters: Dict[str, str]) -> Dict:
     """Return JSON response at given url and parameters."""
     return get(url, params=parameters, headers={"Accept": "application/json"}).json()

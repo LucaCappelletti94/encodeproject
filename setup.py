@@ -63,7 +63,8 @@ setup(
     install_requires=[
         "requests",
         "tqdm",
-        "humanize"
+        "humanize",
+        "cache_decorator"
     ],
     extras_require=extras,
 )
