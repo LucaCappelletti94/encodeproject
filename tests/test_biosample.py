@@ -5,5 +5,5 @@ def test_biosample():
     biosample("ENCSR000EDP", False)
 
 def test_biosamples():
-    biosamples(["ENCSR000EDP"])
+    biosamples(["ENCFF454HMH"])
     biosamples(["ENCSR000EDP"], False)

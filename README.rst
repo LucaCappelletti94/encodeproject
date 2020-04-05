@@ -14,7 +14,8 @@ As usual, just download it using pip:
 
 Tests Coverage
 ----------------------------------------------
-Since some software handling coverages sometimes get slightly different results, here's three of them:
+Since some software handling coverages sometimes
+get slightly different results, here's three of them:
 
 |coveralls| |sonar_coverage| |code_climate_coverage|
 
@@ -54,6 +55,16 @@ For querying the biosamples you can run the following:
 
     my_biosample_query_response = biosample(
         accession="ENCSR000EDP", # The accession code for the desired biosample
+    )
+
+For running multiple queries for biosamples at once you can run the following:
+
+.. code:: python
+
+    from encodeproject import biosamples
+
+    responses = biosamples(
+        accessions=["ENCSR000EDP", "ENCSR030EDP", "ENCSR067EDP"], # The accessions code for the desired biosamples
     )
 
 Filters
@@ -137,7 +148,7 @@ and push it on the library) or alternatively you can open an issue and when I'll
     :target: https://pepy.tech/badge/encodeproject
     :alt: Pypi total project downloads 
 
-.. |codacy|  image:: https://api.codacy.com/project/badge/Grade/0f5c4026d3ec4cadb0d4a51f83235a2c
+.. |codacy| image:: https://api.codacy.com/project/badge/Grade/0f5c4026d3ec4cadb0d4a51f83235a2c
     :target: https://www.codacy.com/manual/LucaCappelletti94/encodeproject?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=LucaCappelletti94/encodeproject&amp;utm_campaign=Badge_Grade
     :alt: Codacy Maintainability
 
