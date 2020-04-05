@@ -51,9 +51,15 @@ def sample_informations(sample: Dict) -> Dict:
     """Return generic informations from the sample.
         sample:Dict, the sample from which to extract the informations.
     """
-    organism = sample["target"]["organism"]
+    if "target" in sample:
+        organism = sample["target"]["organism"]
+        if isinstance(organism, dict):
+            organism = organism["name"]
+    else:
+        organism = "Unknown"
+
     return {
-        "organism": (organism if isinstance(organism, str) else organism["name"]),
+        "organism": organism,
         "cell_line": sample["biosample_ontology"]["term_name"],
         "target": sample["target"]["label"]
     }
