@@ -52,16 +52,18 @@ def sample_informations(sample: Dict) -> Dict:
         sample:Dict, the sample from which to extract the informations.
     """
     if "target" in sample:
-        organism = sample["target"]["organism"]
+        target = sample["target"]
+        organism = target["organism"]
+        label = target["label"]
         if isinstance(organism, dict):
             organism = organism["name"]
     else:
-        organism = "Unknown"
+        label = organism = "Unknown"
 
     return {
         "organism": organism,
         "cell_line": sample["biosample_ontology"]["term_name"],
-        "target": sample["target"]["label"]
+        "target": label
     }
 
 
