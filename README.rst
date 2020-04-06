@@ -4,6 +4,8 @@ encodeproject
 
 Python package wrapping some of the encode project APIs.
 
+There is a `short Notebook with a tutorial available here <https://github.com/LucaCappelletti94/bioinformatics_practice/blob/master/Notebooks/Retrieving%20data%20from%20ENCODE%20-%20Practical%20example.ipynb>`_.
+
 How do I install this package?
 ----------------------------------------------
 As usual, just download it using pip:
@@ -37,12 +39,63 @@ For querying the experiments you can run the following:
 
     from encodeproject import experiment
 
-    my_experiment_query_response = experiment(
-        assembly="hg19", # The assembly label, for instance "hg19".
-        status="released", # The release status, can be either "released", "archived" or "revoked".
-        cell_line="HepG2", # The label for the chosen cell line for instance "HepG2".
-        target="ARID3A", # The target name, for instance "ARID3A".
-        parameters = {} # Additional query parameters
+    experiments = experiment()
+
+Let's take a look to an in-depth example, showing all the available parameters:
+
+.. code:: python
+
+    from encodeproject import experiment
+
+    experiments = experiment(
+        # The cell line we are interested in.
+        # For example values could be K562 or GM12878.
+        # We use None to specify that we are not
+        # interested in any particular cell line.
+        cell_line = None,
+        # The reference genomic assembly we want.
+        # For example values could be hg19 or GRCh38
+        # We use None to specify that we are not
+        # interested in any particular genomic assembly.
+        assembly = None,
+        # The target (the genes coding for proteins in this context) we want.
+        # For example values could be CTCF or H3K27ac
+        # We use None to specify that we are not
+        # interested in any particular target.
+        target = None,
+        # The status of the data we want.
+        # We only want released data, meaning data that are
+        # neither old (archived) or with errors (revoked).
+        status = 'released',
+        # The organism we are considering.
+        # Since we only want Homo sapiens data,
+        # we specify that organism name.
+        organism = 'Homo sapiens',
+        # The format of the files we are interested in
+        file_type = 'bigWig',
+        # We ask to consider only experiments with replicas
+        replicated = True,
+        # We only want with the signals
+        # expressed as "fold change over control"
+        searchTerm = "fold change over control",
+        # We do not need to specify any other specific
+        # additional parameters
+        parameters = None,
+        # We want to download all the
+        # available experiments
+        limit = 'all',
+        # We want to drop all the experiments
+        # which have been characterized by significand issues
+        drop_errors = (
+            'extremely low read depth',
+            'missing control alignments',
+            'control extremely low read depth',
+            'extremely low spot score',
+            'extremely low coverage',
+            'extremely low read length',
+            'inconsistent control',
+            'inconsistent read count'
+        )
     )
 
 All parameters are optional, they just act as additional filters.
@@ -56,6 +109,32 @@ For querying the biosamples you can run the following:
     my_biosample_query_response = biosample(
         accession="ENCSR000EDP", # The accession code for the desired biosample
     )
+
+As for the experiments there are a number of filters available:
+
+.. code:: python
+
+    hg19_samples = biosamples(
+        # The list of accessions to retrieve
+        accessions=accession_codes,
+        # Wethever to convert the results in dataframe.
+        # The following filters only apply if dataframes are used
+        to_dataframe = True,
+        # The status of the data we want.
+        # We only want released data, meaning data that are
+        # neither old (archived) or with errors (revoked).
+        status = "released",
+        # The organism we want.
+        organism = "human",
+        # The genomic assembly we want to use
+        assembly = "hg19",
+        # The output type we want.
+        output_type = "fold change over control",
+        # And finally the bare minimum amount
+        # of biological replicates
+        min_biological_replicates = 2
+    )
+
 
 For running multiple queries for biosamples at once you can run the following:
 
