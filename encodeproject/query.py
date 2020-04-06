@@ -95,7 +95,14 @@ def experiment(
     })
 
 
-def biosample(accession: str,  to_dataframe: bool = True) -> Dict:
+def biosample(
+    accession: str,
+    to_dataframe: bool = True,
+    status: str = "released",
+    organism: str = "human",
+    assembly: str = "hg19",
+    min_biological_replicates: int = 2
+) -> Dict:
     """Return JSON response for given biosample.
 
     Parameters
@@ -104,6 +111,15 @@ def biosample(accession: str,  to_dataframe: bool = True) -> Dict:
         code corresponding to biosample.
     to_dataframe: bool = True,
         Whetever to convert the obtained data to a DataFrame.
+        Filters are applied only to dataframes.
+    status: str = "released",
+        Status of data to consider.
+    organism: str = "human",
+        The organism to filter for.
+    assembly: str = "hg19",
+        The genomic assembly to use.
+    min_biological_replicates: int = 2,
+        The minimal amount of biologial replicas to use.
 
     Returns
     -----------------------------
@@ -112,14 +128,22 @@ def biosample(accession: str,  to_dataframe: bool = True) -> Dict:
     data = encode_query(
         path="experiments/{accession}".format(accession=accession)
     )
-    return biosample_to_dataframe(data) if to_dataframe else data
+    data = biosample_to_dataframe(data) if to_dataframe else data
+    if to_dataframe:
+        data = data[
+            (data.status == status) &
+            (data.organism == organism) &
+            (data.assembly == assembly) &
+            (data.biological_replicates.str.len() >= min_biological_replicates)
+        ]
+    return data
 
 
-def _biosample(args) -> Dict:
-    return biosample(*args)
+def _biosample(kwargs) -> Dict:
+    return biosample(**kwargs)
 
 
-def biosamples(accessions: List[str], to_dataframe: bool = True) -> List[Union[Dict, pd.DataFrame]]:
+def biosamples(accessions: List[str], to_dataframe: bool = True, **kwargs) -> List[Union[Dict, pd.DataFrame]]:
     """Return list of JSON responses for given accession codes.
 
     Parameters
@@ -135,8 +159,13 @@ def biosamples(accessions: List[str], to_dataframe: bool = True) -> List[Union[D
     """
     with Pool(min(cpu_count(), len(accessions))) as p:
         data = list(tqdm(
-            p.imap(_biosample, ((accession, to_dataframe)
-                                for accession in accessions)),
+            p.imap(_biosample, (
+                {
+                    "accession": accession,
+                    "to_dataframe": to_dataframe,
+                    **kwargs
+                }
+                for accession in accessions)),
             total=len(accessions),
             desc="Retrieving biosamples",
             leave=False,
