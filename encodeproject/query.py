@@ -97,4 +97,4 @@ def biosamples(accessions: List[str], to_dataframe: bool = True) -> List[Union[D
         ))
         p.close()
         p.join()
-    return pd.concat(data) if to_dataframe else data
+    return pd.concat(data).reset_index(drop=True) if to_dataframe else data
