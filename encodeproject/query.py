@@ -101,6 +101,7 @@ def biosample(
     status: str = "released",
     organism: str = "human",
     assembly: str = "hg19",
+    output_type: str = "fold change over control",
     min_biological_replicates: int = 2
 ) -> Dict:
     """Return JSON response for given biosample.
@@ -134,6 +135,7 @@ def biosample(
             (data.status == status) &
             (data.organism == organism) &
             (data.assembly == assembly) &
+            (data.output_type == output_type) &
             (data.biological_replicates.str.len() >= min_biological_replicates)
         ]
     return data
