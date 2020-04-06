@@ -1,5 +1,5 @@
 from requests import get
-from typing import Dict, List, Union
+from typing import Dict, List, Union, Tuple
 from multiprocessing import cpu_count, Pool
 from tqdm.auto import tqdm
 from .utils import biosample_to_dataframe
@@ -34,7 +34,17 @@ def experiment(
     replicated: bool = True,
     searchTerm: str = None,
     parameters: Dict[str, str] = None,
-    limit: Union[str, int] = "all"
+    limit: Union[str, int] = "all",
+    drop_errors: Union[Tuple[str], str] = (
+        "extremely low read depth",
+        "missing control alignments",
+        "control extremely low read depth",
+        "extremely low spot score",
+        "extremely low coverage",
+        "extremely low read length",
+        "inconsistent control",
+        "inconsistent read count"
+    )
 ) -> Dict:
     """Return JSON response for given parameters.
 
@@ -67,7 +77,10 @@ def experiment(
         "limit": limit,
         **({
             "replication_type!": "unreplicated",
-        } if replicated else {})
+        } if replicated else {}),
+        **({
+            "audit.ERROR.category!": drop_errors
+        } if drop_errors else {}),
         ** {
             key: value for key, value in {
                 "biosample_ontology.term_name": cell_line,
