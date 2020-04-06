@@ -31,7 +31,7 @@ def experiment(
     status: str = "released",
     organism: str = "Homo sapiens",
     file_type: str = "bigWig",
-    replication_type: str = "isogenic",
+    replicated: bool = True,
     searchTerm: str = None,
     parameters: Dict[str, str] = None,
     limit: Union[str, int] = "all"
@@ -52,8 +52,8 @@ def experiment(
         The organism to query for.
     file_type: str = "bigWig",
         The type of the required files. By default bigWig.
-    replication_type: str = "isogenic",
-        The type of replication.
+    replicated: bool = True,
+        Whetever to enforce for only replicated results.
     searchTerm: str = None, 
         additional search terms.
     parameters: Dict[str, str],
@@ -65,13 +65,15 @@ def experiment(
         "type": "Experiment",
         "status": status,
         "limit": limit,
-        **{
+        **({
+            "replication_type!": "unreplicated",
+        } if replicated else {})
+        ** {
             key: value for key, value in {
                 "biosample_ontology.term_name": cell_line,
                 "assembly": assembly,
                 "target.label": target,
                 "searchTerm": searchTerm,
-                "replication_type": replication_type,
                 "replicates.library.biosample.donor.organism.scientific_name": organism,
                 "files.file_type": file_type
             }.items() if value is not None
