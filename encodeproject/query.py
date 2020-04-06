@@ -29,8 +29,9 @@ def experiment(
     assembly: str = None,
     target: str = None,
     status: str = "released",
-    organism: str = "Homo Sapiens",
+    organism: str = "Homo sapiens",
     file_type: str = "bigWig",
+    replication_type: str = "isogenic",
     searchTerm: str = None,
     parameters: Dict[str, str] = None,
     limit: Union[str, int] = "all"
@@ -47,10 +48,12 @@ def experiment(
         the target name, for instance "ARID3A".
     status: str = "released",
         the release status, can be either "released", "archived" or "revoked".
-    organism: str = "Homo Sapiens",
+    organism: str = "Homo sapiens",
         The organism to query for.
     file_type: str = "bigWig",
         The type of the required files. By default bigWig.
+    replication_type: str = "isogenic",
+        The type of replication.
     searchTerm: str = None, 
         additional search terms.
     parameters: Dict[str, str],
@@ -68,8 +71,9 @@ def experiment(
                 "assembly": assembly,
                 "target.label": target,
                 "searchTerm": searchTerm,
+                "replication_type": replication_type,
                 "replicates.library.biosample.donor.organism.scientific_name": organism,
-                "file_type": file_type
+                "files.file_type": file_type
             }.items() if value is not None
         },
         ** ({} if parameters is None else parameters)
