@@ -24,24 +24,52 @@ def encode_query(parameters: Dict[str, str] = None, path: str = "search") -> Dic
     )
 
 
-def experiment(cell_line: str = None, assembly: str = None, target: str = None, status: str = "released", searchTerm: str = None, parameters: Dict[str, str] = None) -> Dict:
+def experiment(
+    cell_line: str = None,
+    assembly: str = None,
+    target: str = None,
+    status: str = "released",
+    organism: str = "Homo Sapiens",
+    file_type: str = "bigWig",
+    searchTerm: str = None,
+    parameters: Dict[str, str] = None,
+    limit: Union[str, int] = "all"
+) -> Dict:
     """Return JSON response for given parameters.
-        cell_line: str = None, the label for the chosen cell line for instance "HepG2".
-        assembly: str = None, the assembly label, for instance "hg19".
-        target: str = None, the target name, for instance "ARID3A".
-        status: str = "released", the release status, can be either "released", "archived" or "revoked".
-        searchTerm: str = None, additional search terms.
-        parameters: Dict[str, str], the remaining parameters that are not currently supported directly.
+
+    Parameters
+    ------------------------------
+    cell_line: str = None,
+        the label for the chosen cell line for instance "HepG2".
+    assembly: str = None,
+        the assembly label, for instance "hg19".
+    target: str = None,
+        the target name, for instance "ARID3A".
+    status: str = "released",
+        the release status, can be either "released", "archived" or "revoked".
+    organism: str = "Homo Sapiens",
+        The organism to query for.
+    file_type: str = "bigWig",
+        The type of the required files. By default bigWig.
+    searchTerm: str = None, 
+        additional search terms.
+    parameters: Dict[str, str],
+        the remaining parameters that are not currently supported directly.
+    limit: Union[str, int] = "all",
+        Number of experiments to query for. Use "all" for all experiments.
     """
     return encode_query({
         "type": "Experiment",
         "status": status,
+        "limit": limit,
         **{
             key: value for key, value in {
                 "biosample_ontology.term_name": cell_line,
                 "assembly": assembly,
                 "target.label": target,
-                "searchTerm": searchTerm
+                "searchTerm": searchTerm,
+                "replicates.library.biosample.donor.organism.scientific_name": organism,
+                "file_type": file_type
             }.items() if value is not None
         },
         ** ({} if parameters is None else parameters)
