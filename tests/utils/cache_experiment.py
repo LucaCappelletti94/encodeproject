@@ -19,19 +19,3 @@ def cached_experiment(**kwargs: Dict):
     with open(path, "w") as f:
         json.dump(response, f)
     return response
-
-
-def cached_biosample(**kwargs: Dict):
-    path = "tests/cached_biosample"
-    os.makedirs(path, exist_ok=True)
-    path = "{path}/{sha}.json".format(
-        path=path,
-        sha=sha256(kwargs)
-    )
-    if os.path.exists(path):
-        with open(path, "r") as f:
-            return json.load(f)
-    response = biosample(**kwargs)
-    with open(path, "w") as f:
-        json.dump(response, f)
-    return response

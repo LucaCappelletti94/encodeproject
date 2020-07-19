@@ -10,3 +10,5 @@ coverage.xml
 *.egg-info
 *.bigWig
 .pytest_cache
+encodeproject_cache
+tests/cached_*

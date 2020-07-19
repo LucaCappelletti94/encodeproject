@@ -1,3 +1,3 @@
-from .cache_experiment import cached_experiment, cached_biosample
+from .cache_experiment import cached_experiment
 
-__all__ = ["cached_experiment", "cached_biosample"]
+__all__ = ["cached_experiment"]
