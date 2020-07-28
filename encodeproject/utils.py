@@ -19,11 +19,6 @@ def download(url: str, path: str = None, block_size: int = 32768):
         The path where to store the data, if None the end of the url is used.
     block_size:int=1024,
         The download block size.
-
-    Raises
-    ----------------------
-    ValueError, 
-        if the downloaded file size does not match the header file size.
     """
     if path is None:
         path = url.split("/")[-1]
@@ -40,11 +35,25 @@ def download(url: str, path: str = None, block_size: int = 32768):
     directory = os.path.dirname(os.path.abspath(path))
     if directory:
         os.makedirs(directory, exist_ok=True)
-    with open(path, 'wb') as f:
-        for data in r.iter_content(block_size):
-            t.update(len(data))
-            f.write(data)
-    t.close()
+    # If the user hits ctrl-c during the download we want to remove the partial
+    # downloaded file.
+    try:
+        with open(path, 'wb') as f:
+            for data in r.iter_content(block_size):
+                t.update(len(data))
+                f.write(data)
+        t.close()
+    except KeyboardInterrupt as e:
+        os.remove(path)
+        t.close()
+        raise e
+    if r.status_code != 200:
+        raise ValueError(
+            "Request to url {url} finished with status code {status}.".format(
+                url=url,
+                status=r.status_code
+            )
+        )
 
 
 def sample_informations(sample: Dict) -> Dict:
