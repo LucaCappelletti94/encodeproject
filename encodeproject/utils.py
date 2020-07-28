@@ -48,6 +48,7 @@ def download(url: str, path: str = None, block_size: int = 32768):
         t.close()
         raise e
     if r.status_code != 200:
+        os.remove(path)
         raise ValueError(
             "Request to url {url} finished with status code {status}.".format(
                 url=url,
