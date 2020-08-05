@@ -8,7 +8,7 @@ import pandas as pd
 __all__ = ["download", "biosample_to_dataframe"]
 
 
-def download(url: str, path: str = None, block_size: int = 32768):
+def download(url: str, path: str = None, block_size: int = 32768, cache: bool = False):
     """Download file at given url showing a loading bar.
 
     Parameters
@@ -19,9 +19,18 @@ def download(url: str, path: str = None, block_size: int = 32768):
         The path where to store the data, if None the end of the url is used.
     block_size:int=1024,
         The download block size.
+    cache: bool = False,
+        Wethever to skip download if local file already exists.
+
+    Raises
+    --------------------------
+    ValueError,
+        If the request has not a status code 200 (success).
     """
     if path is None:
         path = url.split("/")[-1]
+    if cache and os.path.exists(path):
+        return
     r = requests.get(url, stream=True)
     total_size = int(r.headers.get('content-length', 0))
     t = tqdm(
