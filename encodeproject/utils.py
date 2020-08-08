@@ -8,7 +8,7 @@ import pandas as pd
 __all__ = ["download", "biosample_to_dataframe"]
 
 
-def download(url: str, path: str = None, block_size: int = 32768, cache: bool = False):
+def download(url: str, path: str = None, block_size: int = 32768, cache: bool = False, append: bool = False):
     """Download file at given url showing a loading bar.
 
     Parameters
@@ -19,6 +19,8 @@ def download(url: str, path: str = None, block_size: int = 32768, cache: bool = 
         The path where to store the data, if None the end of the url is used.
     block_size:int=1024,
         The download block size.
+    append: bool = False,
+        Wethever to append to the given file or not.
     cache: bool = False,
         Wethever to skip download if local file already exists.
 
@@ -47,7 +49,8 @@ def download(url: str, path: str = None, block_size: int = 32768, cache: bool = 
     # If the user hits ctrl-c during the download we want to remove the partial
     # downloaded file.
     try:
-        with open(path, 'wb') as f:
+        modality = "ab" if append else "wb"
+        with open(path, modality) as f:
             for data in r.iter_content(block_size):
                 t.update(len(data))
                 f.write(data)
