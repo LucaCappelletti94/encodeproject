@@ -65,7 +65,7 @@ setup(
         "requests",
         "tqdm",
         "humanize",
-        "cache_decorator"
+        "cache_decorator[compress_json]"
     ],
     extras_require=extras,
 )
