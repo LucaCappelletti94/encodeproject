@@ -65,8 +65,7 @@ setup(
         "requests",
         "tqdm",
         "humanize",
-        "cache_decorator",
-        "dict_hash>=1.1.10"
+        "cache_decorator"
     ],
     extras_require=extras,
 )
