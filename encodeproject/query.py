@@ -32,6 +32,7 @@ def experiment(
     organism: str = "Homo sapiens",
     file_type: str = "bigWig",
     replicated: bool = True,
+    perturbed: bool = None,
     searchTerm: str = None,
     parameters: Dict[str, str] = None,
     limit: Union[str, int] = "all",
@@ -64,6 +65,9 @@ def experiment(
         The type of the required files. By default bigWig.
     replicated: bool = True,
         Whetever to enforce for only replicated results.
+    perturbed: bool = False,
+        Wether to filter perturbed data (True), unperturbed data (False) or 
+        both of the classes (None).
     searchTerm: str = None, 
         additional search terms.
     parameters: Dict[str, str],
@@ -71,6 +75,11 @@ def experiment(
     limit: Union[str, int] = "all",
         Number of experiments to query for. Use "all" for all experiments.
     """
+    if perturbed not in (True, False, None):
+        raise ValueError((
+            "Given value '{}' for parameter `perturbed` is not supported.\n"
+            "The valid values are `True`, `False` and `None`."
+        ).format(perturbed))
     return encode_query({
         "type": "Experiment",
         "status": status,
@@ -87,6 +96,7 @@ def experiment(
                 "assembly": assembly,
                 "target.label": target,
                 "searchTerm": searchTerm,
+                "perturbed": perturbed,
                 "replicates.library.biosample.donor.organism.scientific_name": organism,
                 "files.file_type": file_type
             }.items() if value is not None
