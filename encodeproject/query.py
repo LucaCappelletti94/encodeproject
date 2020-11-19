@@ -65,7 +65,7 @@ def experiment(
         The type of the required files. By default bigWig.
     replicated: bool = True,
         Whetever to enforce for only replicated results.
-    perturbed: bool = False,
+    perturbed: bool = None,
         Wether to filter perturbed data (True), unperturbed data (False) or 
         both of the classes (None).
     searchTerm: str = None, 
@@ -111,7 +111,9 @@ def biosample(
     status: str = "released",
     organism: str = "human",
     assembly: str = "hg19",
-    output_type: str = "fold change over control",
+    file_format: str = "bigWig",
+    replication_type: str = "isogenic",
+    output_type: str = None,
     min_biological_replicates: int = 2
 ) -> Dict:
     """Return JSON response for given biosample.
@@ -129,6 +131,15 @@ def biosample(
         The organism to filter for.
     assembly: str = "hg19",
         The genomic assembly to use.
+    file_format: str = "bigWig",
+        Type of the format of the files.
+        Use None to skip this filter.
+    replication_type: str = "isogenic",
+        Type of the experiment replication.
+        Use None to skip this filter.
+    output_type: str = None,
+        Type of output to filter for.
+        Use None to skip this filter.
     min_biological_replicates: int = 2,
         The minimal amount of biologial replicas to use.
 
@@ -141,13 +152,21 @@ def biosample(
     )
     data = biosample_to_dataframe(data) if to_dataframe else data
     if to_dataframe:
-        data = data[
-            (data.status == status) &
-            (data.organism == organism) &
-            (data.assembly == assembly) &
-            (data.output_type == output_type) &
-            (data.biological_replicates.str.len() >= min_biological_replicates)
-        ]
+        if status is not None:
+            data = data[data.status == status]
+        if organism is not None:
+            data = data[data.organism == organism]
+        if file_format is not None:
+            data = data[data.file_format == file_format]
+        if assembly is not None:
+            data = data[data.assembly == assembly]
+        if replication_type is not None:
+            data = data[data.replication_type == replication_type]
+        if output_type is not None:
+            data = data[data.output_type == output_type]
+        if min_biological_replicates > 0:
+            data = data[data.biological_replicates.str.len() >=
+                        min_biological_replicates]
     return data
 
 
@@ -155,7 +174,12 @@ def _biosample(kwargs) -> Dict:
     return biosample(**kwargs)
 
 
-def biosamples(accessions: List[str], to_dataframe: bool = True, **kwargs) -> List[Union[Dict, pd.DataFrame]]:
+def biosamples(
+    accessions: List[str],
+    to_dataframe: bool = True,
+    use_multiprocessing: bool = True,
+    **kwargs
+) -> List[Union[Dict, pd.DataFrame]]:
     """Return list of JSON responses for given accession codes.
 
     Parameters
@@ -164,25 +188,48 @@ def biosamples(accessions: List[str], to_dataframe: bool = True, **kwargs) -> Li
         code corresponding to biosample.
     to_dataframe: bool = True,
         Whetever to convert the obtained data to a DataFrame.
+    use_multiprocessing: bool = True,
+        Wether to use multiprocessing or execute in single thread.
 
     Returns
     -----------------------------
     Return the list of biosamples curresponding to given accession code.
     """
-    with Pool(min(cpu_count(), len(accessions))) as p:
-        data = list(tqdm(
-            p.imap(_biosample, (
-                {
-                    "accession": accession,
-                    "to_dataframe": to_dataframe,
-                    **kwargs
-                }
-                for accession in accessions)),
-            total=len(accessions),
-            desc="Retrieving biosamples",
-            leave=False,
-            dynamic_ncols=True
-        ))
-        p.close()
-        p.join()
+    tasks = [
+        {
+            "accession": accession,
+            "to_dataframe": to_dataframe,
+            **kwargs
+        }
+        for accession in accessions
+    ]
+    if use_multiprocessing:
+        with Pool(min(cpu_count(), len(accessions))) as p:
+            data = list(tqdm(
+                p.imap(_biosample, tasks),
+                total=len(accessions),
+                desc="Retrieving biosamples",
+                leave=False,
+                dynamic_ncols=True
+            ))
+            p.close()
+            p.join()
+    else:
+        data = [
+            _biosample(task)
+            for task in tqdm(
+                tasks,
+                total=len(accessions),
+                desc="Retrieving biosamples",
+                leave=False,
+                dynamic_ncols=True
+            )
+        ]
+
+    data = [
+        sample
+        for sample in data
+        if sample is not None
+    ]
+
     return pd.concat(data).reset_index(drop=True) if to_dataframe else data

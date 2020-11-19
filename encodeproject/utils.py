@@ -84,6 +84,12 @@ def sample_informations(sample: Dict) -> Dict:
 
     return {
         "organism": organism,
+        "accession": sample["accession"],
+        "status": sample["status"],
+        "assay_title": sample["assay_title"],
+        "assay_term_name": sample["assay_term_name"],
+        "replication_type": sample["replication_type"],
+        "date_released": sample["date_released"],
         "cell_line": sample["biosample_ontology"]["term_name"],
         "target": label
     }
@@ -93,6 +99,8 @@ def sample_files_informations(sample: Dict) -> List[Dict]:
     """Return list of informations for every files in the sample.
         sample:Dict, the sample from which to extract the files informations.
     """
+    if len(sample["files"]) == 0:
+        return [{}]
     return [
         {
             "status": f["status"] if "status" in f else None,
@@ -100,7 +108,7 @@ def sample_files_informations(sample: Dict) -> List[Dict]:
             "file_size":f["file_size"] if "file_size" in f else None,
             "file_format":f["file_format"] if "file_format" in f else None,
             "assembly":f["assembly"] if "assembly" in f else None,
-            "biological_replicates":sorted(f["biological_replicates"]),
+            "biological_replicates":sorted(f["biological_replicates"]) if "biological_replicates" in f else None,
             "output_type":f["output_type"] if "output_type" in f else None,
             "url":f["cloud_metadata"]["url"] if "cloud_metadata" in f else None,
         } for f in sample["files"]
@@ -112,9 +120,15 @@ def biosample_to_dataframe(sample: Dict) -> pd.DataFrame:
         sample:Dict, the sample to convert into a simple DataFrame.
     """
     sample = normalize_sample(sample)
-    df = pd.DataFrame(sample_files_informations(sample))
-    for key, value in sample_informations(sample).items():
-        df[key] = value
+    data = sample_files_informations(sample)
+    metadata = sample_informations(sample)
+    df = pd.DataFrame([
+        {
+            **metadata,
+            **d,
+        }
+        for d in data
+    ])
     return df
 
 
