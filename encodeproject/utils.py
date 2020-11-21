@@ -90,7 +90,11 @@ def sample_informations(sample: Dict) -> Dict:
         "assay_term_name": sample["assay_term_name"],
         "replication_type": sample["replication_type"],
         "date_released": sample["date_released"],
+        "date_created": sample["date_created"].split("T")[0],
+        "term_id": sample["biosample_ontology"]["term_id"],
         "cell_line": sample["biosample_ontology"]["term_name"],
+        "institute_name": sample["lab"]["institute_name"],
+        "title": sample["lab"]["title"],
         "target": label
     }
 
@@ -108,6 +112,7 @@ def sample_files_informations(sample: Dict) -> List[Dict]:
             "file_size":f["file_size"] if "file_size" in f else None,
             "file_format":f["file_format"] if "file_format" in f else None,
             "assembly":f["assembly"] if "assembly" in f else None,
+            "date_created":f["date_created"].split("T")[0] if "date_created" in f else None,
             "biological_replicates":sorted(f["biological_replicates"]) if "biological_replicates" in f else None,
             "output_type":f["output_type"] if "output_type" in f else None,
             "url":f["cloud_metadata"]["url"] if "cloud_metadata" in f else None,
