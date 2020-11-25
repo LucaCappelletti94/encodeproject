@@ -64,6 +64,7 @@ setup(
     install_requires=[
         "requests",
         "tqdm",
+        "pandas",
         "humanize",
         "cache_decorator[compress_json]"
     ],
