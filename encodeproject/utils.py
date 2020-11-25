@@ -82,20 +82,39 @@ def sample_informations(sample: Dict) -> Dict:
     else:
         label = organism = "Unknown"
 
+    keys = (
+        "accession",
+        "status",
+        "assay_title",
+        "assay_term_name",
+        "replication_type",
+        "date_released",
+    )
+
     return {
         "organism": organism,
-        "accession": sample["accession"],
-        "status": sample["status"],
-        "assay_title": sample["assay_title"],
-        "assay_term_name": sample["assay_term_name"],
-        "replication_type": sample["replication_type"],
-        "date_released": sample["date_released"],
-        "date_created": sample["date_created"].split("T")[0],
+        "target": label,
         "term_id": sample["biosample_ontology"]["term_id"],
         "cell_line": sample["biosample_ontology"]["term_name"],
         "institute_name": sample["lab"]["institute_name"],
         "title": sample["lab"]["title"],
-        "target": label
+        **{
+            key: sample[key] if key in sample else None
+            for key in keys
+        }
+    }
+
+
+def extract_analysis_objects(analysis_objects: Dict, accession: str) -> Dict:
+    if accession not in analysis_objects:
+        return {
+            "date_created": None,
+            "pipeline_award_rfas": None,
+        }
+    analysis_object = analysis_objects[accession]
+    return {
+        "date_created": analysis_object["date_created"].split("T"),
+        "pipeline_award_rfas": analysis_object["pipeline_award_rfas"],
     }
 
 
@@ -120,12 +139,23 @@ def sample_files_informations(sample: Dict) -> List[Dict]:
         "schema_version",
         "status",
     )
+
+    if "analysis_objects" in sample:
+        remapped_analysis_objects = {
+            file_code.split("/")[2]: analysis_object
+            for analysis_object in sample["analysis_objects"]
+            for file_code in analysis_object["files"]
+        }
+    else:
+        remapped_analysis_objects = {}
+
     return [
         {
             **{
                 key: f[key] if key in f else None
                 for key in keys
             },
+            **extract_analysis_objects(remapped_analysis_objects, f["accession"]),
             "biological_replicates": sorted(f["biological_replicates"]) if "biological_replicates" in f else None,
             "technical_replicates": sorted(f["technical_replicates"]) if "technical_replicates" in f else None,
             "url":f["cloud_metadata"]["url"] if "cloud_metadata" in f else None,
