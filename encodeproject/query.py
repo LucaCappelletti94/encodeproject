@@ -114,7 +114,7 @@ def biosample(
     file_format: str = "bigWig",
     replication_type: str = "isogenic",
     output_type: str = None,
-    min_biological_replicates: int = 2
+    min_biological_replicates: int = 0
 ) -> Dict:
     """Return JSON response for given biosample.
 
@@ -140,7 +140,7 @@ def biosample(
     output_type: str = None,
         Type of output to filter for.
         Use None to skip this filter.
-    min_biological_replicates: int = 2,
+    min_biological_replicates: int = 0,
         The minimal amount of biologial replicas to use.
 
     Returns
