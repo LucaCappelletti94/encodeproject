@@ -105,16 +105,29 @@ def sample_files_informations(sample: Dict) -> List[Dict]:
     """
     if len(sample["files"]) == 0:
         return [{}]
+    keys = (
+        "accession",
+        "assay_term_name",
+        "assembly",
+        "file_format",
+        "file_size",
+        "file_type",
+        "output_category",
+        "output_type",
+        "read_length",
+        "read_length_units",
+        "run_type",
+        "schema_version",
+        "status",
+    )
     return [
         {
-            "status": f["status"] if "status" in f else None,
-            "accession":f["accession"] if "accession" in f else None,
-            "file_size":f["file_size"] if "file_size" in f else None,
-            "file_format":f["file_format"] if "file_format" in f else None,
-            "assembly":f["assembly"] if "assembly" in f else None,
-            "date_created":f["analysis_objects"].split("T")[0] if "analysis_objects" in f else None,
-            "biological_replicates":sorted(f["biological_replicates"]) if "biological_replicates" in f else None,
-            "output_type":f["output_type"] if "output_type" in f else None,
+            **{
+                key: f[key] if key in f else None
+                for key in keys
+            },
+            "biological_replicates": sorted(f["biological_replicates"]) if "biological_replicates" in f else None,
+            "technical_replicates": sorted(f["technical_replicates"]) if "technical_replicates" in f else None,
             "url":f["cloud_metadata"]["url"] if "cloud_metadata" in f else None,
         } for f in sample["files"]
     ]
