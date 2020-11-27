@@ -108,13 +108,12 @@ def sample_informations(sample: Dict) -> Dict:
 def extract_analysis_objects(analysis_objects: Dict, accession: str) -> Dict:
     if accession not in analysis_objects:
         return {
-            "date_created": None,
-            "pipeline_award_rfas": None,
+            "encode_version": None,
         }
     analysis_object = analysis_objects[accession]
+    encode_versions = analysis_object["pipeline_award_rfas"]
     return {
-        "date_created": analysis_object["date_created"].split("T"),
-        "pipeline_award_rfas": analysis_object["pipeline_award_rfas"],
+        "encode_version": None if encode_versions is None or len(encode_versions) == 0 else int(encode_versions[0][-1]),
     }
 
 
