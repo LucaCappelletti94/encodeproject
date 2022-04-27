@@ -66,7 +66,7 @@ setup(
         "tqdm",
         "pandas",
         "humanize",
-        "cache_decorator[compress_json]"
+        "cache_decorator"
     ],
     extras_require=extras,
 )
