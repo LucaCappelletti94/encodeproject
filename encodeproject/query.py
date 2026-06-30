@@ -1,6 +1,6 @@
 from requests import get
 from typing import Dict, List, Union, Tuple
-from multiprocessing import cpu_count, Pool
+import multiprocessing as mp
 from tqdm.auto import tqdm
 from .utils import biosample_to_dataframe
 import pandas as pd
@@ -204,7 +204,11 @@ def biosamples(
         for accession in accessions
     ]
     if use_multiprocessing:
-        with Pool(min(cpu_count(), len(accessions))) as p:
+
+        # get an isolated spawn context and use it to create pool
+        ctx = mp.get_context("spawn")
+
+        with ctx.Pool(min(mp.cpu_count(), len(accessions))) as p:
             data = list(tqdm(
                 p.imap(_biosample, tasks),
                 total=len(accessions),

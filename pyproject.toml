@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=61.0.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "encodeproject"
+dynamic = ["version"]
+description = "Python package wrapping some of the encode project APIs."
+readme = "README.rst"
+authors = [
+    { name = "Luca Cappelletti", email = "cappelletti.luca94@gmail.com" }
+]
+license = { text = "MIT" }
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3"
+]
+dependencies = [
+    "requests",
+    "tqdm",
+    "pandas",
+    "cache_decorator"
+]
+
+[project.urls]
+Homepage = "https://github.com/LucaCappelletti94/encodeproject"
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "pytest-cov",
+    "validate_version_code",
+    "dict_hash"
+]
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+exclude = ["contrib", "docs", "tests*"]
+
+[tool.setuptools.dynamic]
+version = { attr = "encodeproject.__version__.__version__" }

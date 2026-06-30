@@ -110,7 +110,7 @@ As for the experiments there are a number of filters available:
     hg19_samples = biosamples(
         # The list of accessions to retrieve
         accessions=accession_codes,
-        # Wethever to convert the results in dataframe.
+        # Whether to convert the results in dataframe.
         # The following filters only apply if dataframes are used
         to_dataframe = True,
         # The status of the data we want.
