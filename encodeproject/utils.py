@@ -1,6 +1,5 @@
 from tqdm.auto import tqdm
 import requests
-import humanize
 import os
 from typing import List, Dict
 import pandas as pd
@@ -20,9 +19,9 @@ def download(url: str, path: str = None, block_size: int = 32768, cache: bool = 
     block_size:int=1024,
         The download block size.
     append: bool = False,
-        Wethever to append to the given file or not.
+        Whether to append to the given file or not.
     cache: bool = False,
-        Wethever to skip download if local file already exists.
+        Whether to skip download if local file already exists.
 
     Raises
     --------------------------
